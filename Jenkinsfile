@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker { 
             image 'docker:dind' 
-            args '-u root'
+            args '-u root --privileged'
         }
     }
     environment {
@@ -15,8 +15,8 @@ pipeline {
     stages {
         stage('SAST') {
             steps {
-                sh 'apk add --update curl && rm -rf /var/cache/apk/*'
-                sh 'curl -X GET $ECR_TOKEN_URL -H "X-API-Key: $FLOW_API_KEY" -o auth_token.txt'
+                sh 'apk add --update curl'
+                sh 'curl -X GET $ECR_TOKEN_URL -H "X-API-Key: $FLOW_API_KEY" -o auth_token.txt -s'
                 sh 'cat auth_token.txt | docker login $REGISTRY_URL -u AWS --password-stdin'
                 sh 'docker pull $REGISTRY_URL'
                 sh 'docker run -v $CI_PROJECT_DIR:/code -e FLOW_PROJECT_ID -e FLOW_API_KEY -e OLD_COMMIT --rm --entrypoint=./scandiff $REGISTRY_URL:latest'

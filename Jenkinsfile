@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('SAST') {
             steps {
-                sh 'wget --method=GET --header=\'X-API-Key: $FLOW_API_KEY\' -O auth_wget.txt $ECR_TOKEN_URL'
+                sh 'wget --header=\'X-API-Key: $FLOW_API_KEY\' -O auth_token.txt $ECR_TOKEN_URL'
                 sh 'cat auth_token.txt | docker login $REGISTRY_URL -u AWS --password-stdin'
                 sh 'docker pull $REGISTRY_URL'
                 sh 'docker run -v $CI_PROJECT_DIR:/code -e FLOW_PROJECT_ID -e FLOW_API_KEY -e OLD_COMMIT --rm --entrypoint=./scandiff $REGISTRY_URL:latest'

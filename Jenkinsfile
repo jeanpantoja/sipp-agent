@@ -2,8 +2,7 @@ pipeline {
     agent {
         docker { image 'docker:dind' }
     }
-    
-    enviroment {
+    environment {
         FLOW_API_KEY    = credentials('FLOW_API_KEY')
         FLOW_PROJECT_ID = 'llIOLZ8b_RqDdOfq'
         ECR_TOKEN_URL   = 'https://homologa.conviso.com.br/auth/sast'

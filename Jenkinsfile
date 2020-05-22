@@ -1,6 +1,9 @@
 pipeline {
     agent {
-        docker { image 'docker:dind-rootless' }
+        docker { 
+            image 'docker:dind' 
+            args '-u root'
+        }
     }
     environment {
         FLOW_API_KEY    = credentials('FLOW_API_KEY')
@@ -12,7 +15,7 @@ pipeline {
     stages {
         stage('SAST') {
             steps {
-                sh 'apk add --update curl && rm -rf /var/cache/apk/*'
+                sh 'sudo apk add --update curl && rm -rf /var/cache/apk/*'
                 sh 'curl -X GET $ECR_TOKEN_URL -H "X-API-Key: $FLOW_API_KEY" -o auth_token.txt'
                 sh 'cat auth_token.txt | docker login $REGISTRY_URL -u AWS --password-stdin'
                 sh 'docker pull $REGISTRY_URL'

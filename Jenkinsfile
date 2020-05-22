@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('SAST') {
             steps {
-                sh 'sudo apk add --update curl && rm -rf /var/cache/apk/*'
+                sh 'apk add --update curl && rm -rf /var/cache/apk/*'
                 sh 'curl -X GET $ECR_TOKEN_URL -H "X-API-Key: $FLOW_API_KEY" -o auth_token.txt'
                 sh 'cat auth_token.txt | docker login $REGISTRY_URL -u AWS --password-stdin'
                 sh 'docker pull $REGISTRY_URL'

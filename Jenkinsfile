@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker { image 'docker:dind' }
+        docker { image 'docker:dind-rootless' }
     }
     environment {
         FLOW_API_KEY    = credentials('FLOW_API_KEY')

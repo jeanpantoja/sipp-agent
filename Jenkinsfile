@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker { 
             image 'docker:dind' 
-            args '-u root --privileged'
+            args '-u root --privileged -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
     environment {
@@ -15,7 +15,6 @@ pipeline {
     stages {
         stage('SAST') {
             steps {
-                sh 'dockerd &'
                 sh 'apk add --update curl'
                 sh 'curl -X GET $ECR_TOKEN_URL -H "X-API-Key: $FLOW_API_KEY" -o auth_token.txt -s'
                 sh 'cat auth_token.txt | docker login $REGISTRY_URL -u AWS --password-stdin'

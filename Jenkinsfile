@@ -9,6 +9,7 @@ pipeline {
     environment {
         FLOW_API_KEY    = credentials('FLOW_API_KEY')
         FLOW_API_URL    = 'https://homologa.conviso.com.br'
+        FLOW_PROJECT_CODE = '8qE3Q2w9C6qHGtGt'
     }
     stages {
         stage('Help') {
@@ -16,7 +17,7 @@ pipeline {
                 sh 'printenv'
                 sh 'ls -ltrah $WORKSPACE'
                 sh 'echo $USER'
-                sh 'flow sast run --no-send-to-flow -r $WORKSPACE | xargs cat'
+                sh 'flow sast run'
             }
         }
     }

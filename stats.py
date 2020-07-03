@@ -4,6 +4,8 @@ import csv
 import time
 import asyncio
 
+PASSWORD='23812389012'
+
 class Live:
 
     def __init__(self, path):

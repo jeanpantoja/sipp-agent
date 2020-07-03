@@ -1,6 +1,10 @@
 pipeline {
     agent {
-        docker { image 'convisoappsec/flowcli' }
+        docker { 
+            image 'convisoappsec/flowcli' 
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+        
     }
     environment {
         FLOW_API_KEY    = credentials('FLOW_API_KEY')

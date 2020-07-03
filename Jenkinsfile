@@ -1,26 +1,18 @@
 pipeline {
     agent {
-        docker { 
-            image 'docker:dind' 
-            args '-u root --privileged -v /var/run/docker.sock:/var/run/docker.sock'
-        }
+        docker { image 'convisoappsec/flowcli' }
     }
     environment {
         FLOW_API_KEY    = credentials('FLOW_API_KEY')
-        FLOW_PROJECT_ID = 'llIOLZ8b_RqDdOfq'
-        ECR_TOKEN_URL   = 'https://homologa.conviso.com.br/auth/sast'
-        REGISTRY_URL    = 'docker.convisoappsec.com/sastbox'
+        FLOW_API_URL    = 'https://homologa.conviso.com.br'
     }
-
     stages {
-        stage('SAST') {
+        stage('Help') {
             steps {
-                sh 'apk add --update curl'
-                sh 'curl -X GET $ECR_TOKEN_URL -H "X-API-Key: $FLOW_API_KEY" -o auth_token.txt -s'
-                sh 'cat auth_token.txt | docker login $REGISTRY_URL -u AWS --password-stdin'
-                sh 'docker pull $REGISTRY_URL'
-                sh 'docker run -v $WORKSPACE:/code -e FLOW_PROJECT_ID -e FLOW_API_KEY -e OLD_COMMIT --rm --entrypoint=./scandiff $REGISTRY_URL:latest'
-                sh 'docker logout $REGISTRY_URL'
+                sh 'printenv'
+                sh 'ls -ltrah $WORKSPACE'
+                sh 'echo $USER'
+                sh 'flow analysis sast --no-send-to-flow -r $WORKSPACE'
             }
         }
     }

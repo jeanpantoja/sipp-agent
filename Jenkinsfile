@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker { 
             image 'convisoappsec/flowcli' 
-            args '-u root -v /var/run/docker.sock:/var/run/docker.sock'
+            args '-u 1000:1000 -v /var/run/docker.sock:/var/run/docker.sock'
         }
         
     }

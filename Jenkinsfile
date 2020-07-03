@@ -16,7 +16,7 @@ pipeline {
                 sh 'printenv'
                 sh 'ls -ltrah $WORKSPACE'
                 sh 'echo $USER'
-                sh 'flow analysis sast --no-send-to-flow -r $WORKSPACE'
+                sh 'flow sast run --no-send-to-flow -r $WORKSPACE'
             }
         }
     }

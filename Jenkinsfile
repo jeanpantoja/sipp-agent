@@ -17,6 +17,7 @@ pipeline {
                 sh 'printenv'
                 sh 'ls -ltrah $WORKSPACE'
                 sh 'echo $USER'
+                sh 'docker info'
                 sh 'flow sast run'
             }
         }

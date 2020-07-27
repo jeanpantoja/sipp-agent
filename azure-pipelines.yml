@@ -1,7 +1,7 @@
 trigger:
-  - master
+  - master  
 jobs:
-- job: 'Flow_Appsec_Job'
+- job: Flow_Appsec_Job
   pool:
     vmImage: 'ubuntu-16.04'
   container:
@@ -11,14 +11,15 @@ jobs:
     FLOW_PROJECT_CODE: 'Kt5p5zKb_zbth0o0'
   steps:
     - bash: |
-        echo $FLOW_API_KEY > api.key
+          flow -i deploy create -f env_vars with tag-tracker sort-by time > created_deploy_vars    
       env:
-         FLOW_API_KEY: $(FLOW_API_KEY)
+         FLOW_API_KEY: $(FLOW_API_KEY)    
     - bash: |
-          flow -k `cat api.key` -i deploy create -f env_vars with tag-tracker sort-by time > created_deploy_vars    - bash: |
           cat created_deploy_vars
     - bash: |
           source created_deploy_vars
           flow -k `cat api.key` -i sast run \
             --start-commit "$FLOW_DEPLOY_PREVIOUS_VERSION_COMMIT" \
             --end-commit "$FLOW_DEPLOY_CURRENT_VERSION_COMMIT"
+      env:
+         FLOW_API_KEY: $(FLOW_API_KEY)

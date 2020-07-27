@@ -1,23 +1,25 @@
 trigger:
   - master
 jobs:
-- job: "AppSecFlow_Job"
+- job: 'Flow_Appsec_Job'
   pool:
     vmImage: 'ubuntu-16.04'
   container:
-     image: 'convisoappsec/flowcli'
+    image: 'convisoappsec/flowcli'
   variables:
     FLOW_API_KEY: $(FLOW_API_KEY)
-    FLOW_API_URL: 'https://homologa.conviso.com.br'
-    FLOW_PROJECT_CODE: 'Kt5p5zKb_zbth0o0'
-
-  steps:
-  - bash: flow -i deploy create \
-            -f env_vars with tag-tracker \
-            sort-by time > created_deploy_vars
-  - bash: cat created_deploy_vars
-  - bash: |
+    FLOW_API_URL: 'https://your-flow-onpremise-host'
+    FLOW_PROJECT_CODE: 'your-project-code'
+    steps:
+      - bash: |
+          flow -i deploy create \
+          -f env_vars with tag-tracker \
+          sort-by time > created_deploy_vars
+      - bash: |
+          cat created_deploy_vars
+      - bash: |
           source created_deploy_vars
+​
           flow -i sast run \
             --start-commit "$FLOW_DEPLOY_PREVIOUS_VERSION_COMMIT" \
             --end-commit "$FLOW_DEPLOY_CURRENT_VERSION_COMMIT"

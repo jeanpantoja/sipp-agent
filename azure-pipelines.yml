@@ -13,7 +13,7 @@ jobs:
     FLOW_API_KEY: $(_FLOW_API_KEY)
   steps:
     - bash: |
-          echo $FLOW_API_KEY
+          echo "OLARALRALRALR $FLOW_API_KEY"
           flow deploy create -f env_vars with values > created_deploy_vars    
     - bash: |
           cat created_deploy_vars

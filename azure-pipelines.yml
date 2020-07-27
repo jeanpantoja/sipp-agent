@@ -10,9 +10,7 @@ jobs:
     FLOW_API_URL: 'https://homologa.conviso.com.br'
     FLOW_PROJECT_CODE: 'Kt5p5zKb_zbth0o0'
     steps:
-      - bash: flow -i deploy create \
-          -f env_vars with tag-tracker \
-          sort-by time > created_deploy_vars
+      - bash: flow -i deploy create -f env_vars with tag-tracker sort-by time > created_deploy_vars
       - bash: cat created_deploy_vars
       - bash: |
           source created_deploy_vars

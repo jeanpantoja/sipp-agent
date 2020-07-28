@@ -1,16 +1,21 @@
 version: 2.1
 
+orbs:
+  python: circleci/python@0.2.1
+
 jobs:
- flow-help: 
-    docker: 
-      - image: "convisoappsec/flowcli"
+  build-and-test:
+    executor: python/default
     steps:
-      - setup_remote_docker
       - checkout
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
       - run:
-          command: flow --help
-          name: help
+          command: ./manage.py test
+          name: Test
+
 workflows:
   main:
     jobs:
-      - flow-help
+      - build-and-test

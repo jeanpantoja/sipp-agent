@@ -4,7 +4,7 @@ env:
   variables: 
     FLOW_PROJECT_CODE: '2IhoXPKH2rz22LjB'
   secrets-manager:
-    FLOW_API_KEY: arn:aws:secretsmanager:us-west-2:349079569776:secret:FLOW_API_KEY-V0gixn
+    FLOW_API_KEY: FLOW_API_KEY:FLOW_API_KEY
     
 phases:
   pre_build:

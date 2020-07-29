@@ -1,6 +1,10 @@
 version: 0.2
 
+env:
+  variables: 
+    FLOW_PROJECT_CODE: '2IhoXPKH2rz22LjB'
+    
 phases:
   pre_build:
     commands:
-      - flow --help
+      - flow sast run --no-send-to-flow

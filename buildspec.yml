@@ -9,5 +9,4 @@ env:
 phases:
   pre_build:
     commands:
-      - cd $CODEBUILD_SRC_DIR
-      - flow sast run
+      - flow sast run -r $CODEBUILD_SRC_DIR

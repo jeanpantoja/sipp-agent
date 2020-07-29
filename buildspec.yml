@@ -7,4 +7,4 @@ env:
 phases:
   pre_build:
     commands:
-      - flow sast run --no-send-to-flow
+      - flow sast run

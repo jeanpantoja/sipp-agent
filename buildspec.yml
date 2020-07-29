@@ -12,4 +12,4 @@ phases:
     commands:
       - ls -ltrah $CODEBUILD_SRC_DIR
       - cd $CODEBUILD_SRC_DIR && git status
-      - flow sast run -r $CODEBUILD_SRC_DIR
+      - cd $CODEBUILD_SRC_DIR && flow sast run

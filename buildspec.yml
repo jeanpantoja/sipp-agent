@@ -12,4 +12,4 @@ phases:
     commands:
       - ls -ltrah $CODEBUILD_SRC_DIR
       - cd $CODEBUILD_SRC_DIR && git status
-      - cd $CODEBUILD_SRC_DIR && flow sast run
+      - docker --rm run hello-world

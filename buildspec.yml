@@ -12,8 +12,9 @@ phases:
     commands:
       - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+      - pip3 install conviso-flowcli
   pre_build:
     commands:
       - ls -ltrah $CODEBUILD_SRC_DIR
       - cd $CODEBUILD_SRC_DIR && git status
-      - docker run --rm hello-world
+      - flow --version

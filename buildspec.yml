@@ -18,3 +18,4 @@ phases:
       - ls -ltrah $CODEBUILD_SRC_DIR
       - cd $CODEBUILD_SRC_DIR && git status
       - flow --version
+      - flow sast run --no-send-to-flow -r $CODEBUILD_SRC_DIR

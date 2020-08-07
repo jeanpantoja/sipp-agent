@@ -17,6 +17,4 @@ phases:
     commands:
       - deploy_create_output_vars="$(mktemp)"
       - flow deploy create -f env_vars with values > "$deploy_create_output_vars"
-      - flow sast run \
-        --start-commit "$FLOW_DEPLOY_PREVIOUS_VERSION_COMMIT" \
-        --end-commit "$FLOW_DEPLOY_CURRENT_VERSION_COMMIT"
+      - flow sast run --start-commit "$FLOW_DEPLOY_PREVIOUS_VERSION_COMMIT" --end-commit "$FLOW_DEPLOY_CURRENT_VERSION_COMMIT"

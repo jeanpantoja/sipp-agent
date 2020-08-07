@@ -15,7 +15,8 @@ phases:
       - pip3 install conviso-flowcli
   pre_build:
     commands:
-      - ls -ltrah $CODEBUILD_SRC_DIR
-      - cd $CODEBUILD_SRC_DIR && git status
-      - flow --version
-      - flow sast run --no-send-to-flow -r $CODEBUILD_SRC_DIR
+      - deploy_create_output_vars="$(mktemp)"
+      - flow deploy create -f env_vars with values > "$deploy_create_output_vars"
+      - flow sast run \
+        --start-commit "$FLOW_DEPLOY_PREVIOUS_VERSION_COMMIT" \
+        --end-commit "$FLOW_DEPLOY_CURRENT_VERSION_COMMIT"

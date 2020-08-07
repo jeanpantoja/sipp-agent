@@ -15,6 +15,7 @@ phases:
       - pip3 install conviso-flowcli
   pre_build:
     commands:
+      - echo "starting conviso stage.."
       - deploy_create_output_vars="$(mktemp)"
       - flow deploy create -f env_vars with values > "$deploy_create_output_vars"
       - source "$deploy_create_output_vars"

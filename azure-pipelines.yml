@@ -1,15 +1,28 @@
-  
 trigger:
-  - master  
-jobs:
-- job: Flow_Appsec_Job
-  pool:
-    vmImage: 'ubuntu-16.04'
-  container:
-    image: 'convisoappsec/flowcli'
+  - master
 
-  steps:
-    - bash: |
-          flow --version
-      env:
-         FLOW_API_KEY: $(FLOW_API_KEY)
+jobs:
+  - job: Flow_Appsec_Job
+    pool:
+      vmImage: 'ubuntu-16.04'
+    container:
+      image: 'convisoappsec/flowcli'
+    variables:
+      FLOW_API_URL: 'https://35.167.242.93'
+      FLOW_PROJECT_CODE: 'blyPry2jte8DFLxK'
+      FLOW_API_INSECURE: 'true'
+    steps:
+      - bash: |
+            flow deploy create -f env_vars with values > created_deploy_vars
+        env:
+           FLOW_API_KEY: $(FLOW_API_KEY)
+      - bash: |
+            cat created_deploy_vars
+      - bash: |
+            source created_deploy_vars
+            flow sast run \
+              --start-commit "$FLOW_DEPLOY_PREVIOUS_VERSION_COMMIT" \
+              --end-commit "$FLOW_DEPLOY_CURRENT_VERSION_COMMIT"
+        env:
+           FLOW_API_KEY: $(FLOW_API_KEY)
+

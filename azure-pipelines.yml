@@ -7,21 +7,9 @@ jobs:
     vmImage: 'ubuntu-16.04'
   container:
     image: 'convisoappsec/flowcli'
-  variables:
-    FLOW_API_URL: 'https://homologa.conviso.com.br'
-    FLOW_PROJECT_CODE: 'Kt5p5zKb_zbth0o0'
-    FLOW_API_INSECURE: 'true'
+
   steps:
     - bash: |
-          flow deploy create -f env_vars with values > created_deploy_vars    
-      env:
-         FLOW_API_KEY: $(FLOW_API_KEY)    
-    - bash: |
-          cat created_deploy_vars
-    - bash: |
-          source created_deploy_vars
-          flow sast run \
-            --start-commit "$FLOW_DEPLOY_PREVIOUS_VERSION_COMMIT" \
-            --end-commit "$FLOW_DEPLOY_CURRENT_VERSION_COMMIT"
+          flow --version
       env:
          FLOW_API_KEY: $(FLOW_API_KEY)

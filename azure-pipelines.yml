@@ -8,7 +8,7 @@ jobs:
       demands:
         - agent.name -equals ec2-agent
     container:
-      image: 'convisoappsec/flowcli'
+      image: '172.31.51.201:5000/convisoappsec/flowcli'
     variables:
       FLOW_API_URL: 'https://172.31.51.201'
       FLOW_PROJECT_CODE: 'blyPry2jte8DFLxK'

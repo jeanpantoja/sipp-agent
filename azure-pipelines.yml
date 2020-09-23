@@ -8,7 +8,7 @@ jobs:
     container:
       image: 'convisoappsec/flowcli'
     variables:
-      FLOW_API_URL: 'https://35.167.242.93'
+      FLOW_API_URL: 'https://54.212.81.64'
       FLOW_PROJECT_CODE: 'blyPry2jte8DFLxK'
       FLOW_API_INSECURE: 'true'
     steps:

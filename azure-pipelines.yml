@@ -4,7 +4,9 @@ trigger:
 jobs:
   - job: Flow_Appsec_Job
     pool:
-      vmImage: 'ubuntu-16.04'
+      name: Default
+      demands:
+        - agent.name -equals ec2-agent
     container:
       image: 'convisoappsec/flowcli'
     variables:

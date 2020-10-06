@@ -13,6 +13,10 @@ jobs:
       FLOW_API_URL: 'https://172.31.51.201'
       FLOW_PROJECT_CODE: 'blyPry2jte8DFLxK'
       FLOW_API_INSECURE: 'true'
+      # SAST CONFIG
+      FLOW_SASTBOX_SKIP_LOGIN: 'true'
+      FLOW_SASTBOX_REGISTRY: '172.31.51.201:5000'
+      FLOW_SASTBOX_REPOSITORY_NAME: 'convisoappsec/sastbox'
     steps:
       - bash: |
             flow deploy create -f env_vars with values > created_deploy_vars
@@ -27,4 +31,3 @@ jobs:
               --end-commit "$FLOW_DEPLOY_CURRENT_VERSION_COMMIT"
         env:
            FLOW_API_KEY: $(FLOW_API_KEY)
-

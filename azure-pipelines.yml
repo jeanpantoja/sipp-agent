@@ -2,7 +2,7 @@ extends:
   template: convisoappsec-onpremises-azure-pipelines.yml
   parameters:
     # Required parameters
-    convisoSourceBranchTrigger: 'refs/heads/azure_pipelines_template'
+    convisoSourceBranchTrigger: 'refs/heads/master'
     registryDomain: 'convisoappsec.azurecr.io'
     registryServiceConnection: 'registry-service-connection'
 

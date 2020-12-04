@@ -24,7 +24,7 @@ jobs:
 
     steps:
       -
-        bash: az login convisoappsec.azurecr.io
+        bash: az acr login -n convisoappsec.azurecr.io --expose-token
   -
     job: Install_Docker_Job
 

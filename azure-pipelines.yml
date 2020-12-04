@@ -71,6 +71,6 @@ jobs:
         env:
           FLOW_API_KEY: $(FLOW_API_KEY)
       -
-        bash: flow sast run --no-send-to-flow
+        bash: flow sast run --no-send-to-flow || docker run convisoappsec.azurecr.io/sastbox
         env:
           FLOW_API_KEY: $(FLOW_API_KEY)

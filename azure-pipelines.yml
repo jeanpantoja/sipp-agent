@@ -9,6 +9,23 @@ resources:
 
 jobs:
   -
+    job: Testing_Azure_Cli
+    container:
+      image: mcr.microsoft.com/azure-cli
+    workspace:
+      clean: all
+
+    pool:
+      name: Default
+      demands:
+        - Agent.OS -equals Linux
+        # create the capability docker=/usr/bin/docker
+        - docker
+
+    steps:
+      -
+        bash: az login convisoappsec.azurecr.io
+  -
     job: Install_Docker_Job
 
     workspace:

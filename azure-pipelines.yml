@@ -1,3 +1,9 @@
+resources:
+  containers:
+    -
+      container: conviso_sast
+      image: 'convisoappsec.azurecr.io/sastbox'
+      endpoint: 'registry-service-connection'
 
 jobs:
   -

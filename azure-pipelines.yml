@@ -7,24 +7,14 @@ resources:
       # change to your ACR endpoint connection
       endpoint: 'registry-service-connection'
 
+    -
+      container: conviso_flowcli
+      # change to your ACR host
+      image: 'convisoappsec.azurecr.io/flowcli'
+      # change to your ACR endpoint connection
+      endpoint: 'registry-service-connection'
+
 jobs:
-  -
-    job: Testing_Azure_Cli
-    container:
-      image: mcr.microsoft.com/azure-cli
-    workspace:
-      clean: all
-
-    pool:
-      name: Default
-      demands:
-        - Agent.OS -equals Linux
-        # create the capability docker=/usr/bin/docker
-        - docker
-
-    steps:
-      -
-        bash: az acr login -n convisoappsec.azurecr.io --expose-token
   -
     job: Install_Docker_Job
 
@@ -36,15 +26,10 @@ jobs:
       demands:
         - Agent.OS -equals Linux
     steps:
-      -
-        bash: curl -fsSL https://get.docker.com -o get-docker.sh
-      -
-        bash: sh get-docker.sh
-
-      -
-        bash: sudo usermod -aG docker $USER
-      -
-        bash: docker info
+      - bash: curl -fsSL https://get.docker.com -o get-docker.sh
+      - bash: sh get-docker.sh
+      - bash: sudo usermod -aG docker $USER
+      - bash: docker info
 
   -
     job: Flow_Appsec_Job
@@ -64,15 +49,10 @@ jobs:
         # create the capability docker=/usr/bin/docker
         - docker
 
+    container: conviso_flowcli
+
     services:
       conviso_sast: conviso_sast
-
-    container:
-      # change to your ACR host
-      image: 'convisoappsec.azurecr.io/flowcli'
-      # change to your ACR endpoint connection
-      endpoint: 'registry-service-connection'
-
 
     variables:
       # change to your onpremises flow web service url
@@ -83,9 +63,8 @@ jobs:
       FLOW_SASTBOX_REGISTRY: 'convisoappsec.azurecr.io'
 
     steps:
-      -
-        bash: flow --help
+      - bash: flow --help
         env:
           FLOW_API_KEY: $(FLOW_API_KEY)
-      -
-        bash: docker run convisoappsec.azurecr.io/sastbox -h
+
+      - bash: docker run convisoappsec.azurecr.io/sastbox -h

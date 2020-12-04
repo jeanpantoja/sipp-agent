@@ -1,11 +1,3 @@
-resources:
-  containers:
-    -
-      container: conviso_sast
-      type: ACR
-      image: 'convisoappsec.azurecr.io/sastbox'
-      endpoint: 'registry-service-connection'
-
 jobs:
   -
     job: Install_Docker_Job

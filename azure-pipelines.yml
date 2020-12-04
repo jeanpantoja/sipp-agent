@@ -58,6 +58,9 @@ jobs:
 
     steps:
       -
+        bash: az acr --help
+
+      -
         bash: flow --help
         env:
           FLOW_API_KEY: $(FLOW_API_KEY)

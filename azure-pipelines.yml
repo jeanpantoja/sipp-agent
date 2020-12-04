@@ -16,7 +16,7 @@ jobs:
         bash: sh get-docker.sh
 
       -
-        bash: usermod -aG docker $USER
+        bash: sudo usermod -aG docker $USER
       -
         bash: docker info
 

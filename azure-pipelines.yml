@@ -1,33 +1,57 @@
-trigger:
-  - master
 
 jobs:
-  - job: Flow_Appsec_Job
+  -
+    job: Install_Docker_Job
+
+    workspace:
+      clean: all
+
     pool:
       name: Default
       demands:
-        - agent.name -equals ec2-agent
-    container:
-      image: '172.31.51.201:5000/convisoappsec/flowcli'
-    variables:
-      FLOW_API_URL: 'https://172.31.51.201'
-      FLOW_PROJECT_CODE: 'blyPry2jte8DFLxK'
-      FLOW_API_INSECURE: 'true'
-      # SAST CONFIG
-      FLOW_SASTBOX_SKIP_LOGIN: 'true'
-      FLOW_SASTBOX_REGISTRY: '172.31.51.201:5000'
-      FLOW_SASTBOX_REPOSITORY_NAME: 'convisoappsec/sastbox'
+        - Agent.OS -equals Linux
     steps:
-      - bash: |
-            flow deploy create -f env_vars with values > created_deploy_vars
-        env:
-           FLOW_API_KEY: $(FLOW_API_KEY)
-      - bash: |
-            cat created_deploy_vars
-      - bash: |
-            source created_deploy_vars
-            flow sast run \
-              --start-commit "$FLOW_DEPLOY_PREVIOUS_VERSION_COMMIT" \
-              --end-commit "$FLOW_DEPLOY_CURRENT_VERSION_COMMIT"
-        env:
-           FLOW_API_KEY: $(FLOW_API_KEY)
+      -
+        bash: |
+          curl -fsSL https://get.docker.com -o get-docker.sh && \
+            sh get-docker.sh
+      -
+        bash: docker info
+
+  -
+    job: Flow_Appsec_Job
+
+    dependsOn: Install_Docker_Job
+
+    # refs/heads/master should be changed to refs/heads/<target_branch>
+    condition: eq(variables['build.sourceBranch'], 'refs/heads/master')
+
+    workspace:
+      clean: all
+
+    pool:
+      name: Default
+      demands:
+        - Agent.OS -equals Linux
+        # create the capability DOCKER_DAEMON=/usr/bin/dockerd
+        - DOCKER_DAEMON
+        # create the capability DOCKER_DAEMON=/usr/bin/docker
+        - DOCKER_CLI
+
+    container:
+      # change to your ACR host
+      image: 'convisoappsec.azurecr.io/flowcli'
+      # change to your ACR endpoint connection
+      endpoint: 'registry-service-connection'
+
+    variables:
+      # change to your onpremises flow web service url
+      FLOW_API_URL: 'https://homologa.conviso.com.br'
+      FLOW_PROJECT_CODE: 'Kt5p5zKb_zbth0o0'
+      FLOW_SASTBOX_SKIP_LOGIN: 'true'
+      # change to your ACR host
+      FLOW_SASTBOX_REGISTRY: 'convisoappsec.azurecr.io'
+
+    steps:
+      -
+        bash: flow --help

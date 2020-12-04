@@ -12,9 +12,9 @@ jobs:
         - Agent.OS -equals Linux
     steps:
       -
-        bash: |
-          curl -fsSL https://get.docker.com -o get-docker.sh && \
-            sh get-docker.sh
+        bash: curl -fsSL https://get.docker.com -o get-docker.sh
+      -
+        bash: sh get-docker.sh
       -
         bash: docker info
 
@@ -33,10 +33,8 @@ jobs:
       name: Default
       demands:
         - Agent.OS -equals Linux
-        # create the capability DOCKER_DAEMON=/usr/bin/dockerd
-        - DOCKER_DAEMON
-        # create the capability DOCKER_DAEMON=/usr/bin/docker
-        - DOCKER_CLI
+        # create the capability docker=/usr/bin/docker
+        - docker
 
     container:
       # change to your ACR host
@@ -55,3 +53,9 @@ jobs:
     steps:
       -
         bash: flow --help
+        env:
+          FLOW_API_KEY: $(FLOW_API_KEY)
+      -
+        bash: flow sast run --no-send-to-flow
+        env:
+          FLOW_API_KEY: $(FLOW_API_KEY)

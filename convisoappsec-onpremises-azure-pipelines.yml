@@ -1,0 +1,98 @@
+parameters:
+   - name: registryServiceConnection
+     type: string
+     displayName: 'The service connection that connects to Registry'
+     default: registry-service-connection
+   - name: registryDomain
+     type: string
+     displayName: 'The domain name that points to registry'
+   - name: convisoSastRepository
+     type: string
+     displayName: 'The name of Conviso SAST repository'
+     default: 'convisoappsec/sastbox'
+   - name: convisoSastImageTag
+     type: string
+     displayName: 'The tag of Conviso SAST Image'
+     default: 'latest'
+   - name: convisoFlowCliRepository
+     type: string
+     displayName: 'The name of Conviso Flow CLI repository'
+     default: 'convisoappsec/flowcli'
+   - name: convisoFlowCliImageTag
+     type: string
+     displayName: 'The tag of Conviso Flow CLI Image'
+     default: 'latest'
+   - name: convisoSourceBranchTrigger
+     type: string
+     displayName: 'The name of the branch that will run actions within Conviso'
+     default: 'refs/heads/master'
+   - name: convisoSastSkipLogin
+     type: string
+     displayName: 'Skip registry login'
+     default: true
+   - name: convisoFlowApiUrl
+     type: string
+     displayName: 'The url that points to AppSecFlow'
+   - name: convisoFlowApiKey
+     type: string
+     displayName: 'The flow api token'
+   - name: convisoFlowProjectCode
+     type: string
+     displayName: 'The value of the project code'
+resources:
+  containers:
+    -
+      container: conviso_sast
+      # change to your ACR host
+      image: '{{ parameters.registryDomain }}/{{ parameters.convisoSastRepository }}:{{ parameters.convisoSastImageTag }}'
+      # change to your ACR endpoint connection
+      endpoint: '{{ parameters.registryServiceConnection }}'
+    -
+      container: conviso_flowcli
+      # change to your ACR host
+      image: '{{ parameters.registryDomain }}/{{ parameters.convisoFlowCliRepository }}:{{ parameters.convisoFlowCliImageTag }}'
+      # change to your ACR endpoint connection
+      endpoint: '{{ parameters.registryServiceConnection }}'
+jobs:
+  -
+    job: Install_Docker_Job
+    workspace:
+      clean: all
+    pool:
+      name: Default
+      demands:
+        - Agent.OS -equals Linux
+    steps:
+      - bash: curl -fsSL https://get.docker.com -o get-docker.sh
+      - bash: sh get-docker.sh
+      - bash: sudo usermod -aG docker $USER
+      - bash: docker info
+  -
+    job: Flow_Appsec_Job
+    dependsOn: Install_Docker_Job
+    condition: eq(variables['build.sourceBranch'], '{{ parameters.convisoSourceBranchTrigger }}')
+    workspace:
+      clean: all
+    pool:
+      name: Default
+      demands:
+        - Agent.OS -equals Linux
+        # create the capability docker=/usr/bin/docker
+        - docker
+    container: conviso_flowcli
+    services:
+      conviso_sast: conviso_sast
+    variables:
+      # change to your onpremises flow web service url
+      FLOW_API_URL: '{{ parameters.convisoFlowApiUrl }}'
+      FLOW_PROJECT_CODE: '{{ parameters.convisoFlowProjectCode }}'
+      FLOW_SASTBOX_SKIP_LOGIN: '{{ parameters.convisoSastSkipLogin }}'
+      FLOW_SASTBOX_REGISTRY: '{{ parameters.registryDomain }}'
+      FLOW_SASTBOX_REPOSITORY_NAME: '{{ parameters.convisoSastRepository }}'
+      FLOW_SASTBOX_TAG: '{{ parameters.convisoSastImageTag }}'
+      SASTBOX_IMAGE: '{{ parameters.registryDomain }}/{{ parameters.convisoSastRepository }}:{{ parameters.convisoSastImageTag }}'
+    steps:
+      - bash: flow --help
+        env:
+          FLOW_API_KEY: '{{ parameters.convisoFlowApiKey }}'
+      - bash: docker run $SASTBOX_IMAGE -h

@@ -1,3 +1,11 @@
+resources:
+  containers:
+      container: conviso_sast
+      # change to your ACR host
+      image: 'convisoappsec.azurecr.io/sastbox'
+      # change to your ACR endpoint connection
+      endpoint: 'registry-service-connection'
+
 jobs:
   -
     job: Install_Docker_Job
@@ -21,7 +29,7 @@ jobs:
         bash: docker info
 
   -
-    job: Flow_Appsec_SAST_Pull_Job
+    job: Flow_Appsec_Job
 
     dependsOn: Install_Docker_Job
 
@@ -38,32 +46,8 @@ jobs:
         # create the capability docker=/usr/bin/docker
         - docker
 
-    container:
-      image: 'mcr.microsoft.com/azure-cli'
-
-    steps:
-      -
-        bash: az acr login --name convisoappsec.azurecr.io
-      -
-        bash: docker pull convisoappsec.azurecr.io/sastbox
-
-  -
-    job: Flow_Appsec_Job
-
-    dependsOn: Flow_Appsec_SAST_Pull_Job
-
-    # refs/heads/master should be changed to refs/heads/<target_branch>
-    condition: eq(variables['build.sourceBranch'], 'refs/heads/master')
-
-    workspace:
-      clean: all
-
-    pool:
-      name: Default
-      demands:
-        - Agent.OS -equals Linux
-        # create the capability docker=/usr/bin/docker
-        - docker
+    services:
+      conviso_sast: conviso_sast
 
     container:
       # change to your ACR host

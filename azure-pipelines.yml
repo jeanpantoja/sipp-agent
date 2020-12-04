@@ -12,3 +12,5 @@ extends:
 
     # Optional parameters:
     azureAgentsPool: 'Default'
+    convisoFlowCliRepository: 'flowcli'
+    convisoSastRepository: 'sastbox'

@@ -1,3 +1,11 @@
+resources:
+  containers:
+    -
+      container: conviso_sast
+      type: ACR
+      image: 'convisoappsec.azurecr.io/sastbox'
+      endpoint: 'registry-service-connection'
+
 jobs:
   -
     job: Install_Docker_Job
@@ -14,6 +22,9 @@ jobs:
         bash: curl -fsSL https://get.docker.com -o get-docker.sh
       -
         bash: sh get-docker.sh
+
+      -
+        bash: usermod -aG docker $USER
       -
         bash: docker info
 

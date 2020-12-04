@@ -1,5 +1,6 @@
 resources:
   containers:
+    -
       container: conviso_sast
       # change to your ACR host
       image: 'convisoappsec.azurecr.io/sastbox'

@@ -103,7 +103,6 @@ jobs:
     variables:
       # change to your onpremises flow web service url
       FLOW_API_URL: '${{ parameters.convisoFlowApiUrl }}'
-      FLOW_API_KEY: '${{ parameters.convisoFlowApiKey }}'
       FLOW_PROJECT_CODE: '${{ parameters.convisoFlowProjectCode }}'
 
       FLOW_SASTBOX_SKIP_LOGIN: '${{ parameters.convisoSastSkipLogin }}'
@@ -116,4 +115,9 @@ jobs:
 
     steps:
       - bash: flow --help
+        env:
+          FLOW_API_KEY: '${{ parameters.convisoFlowApiKey }}'
+
       - bash: docker run $SASTBOX_IMAGE -h # TODO: remove this
+        env:
+          FLOW_API_KEY: '${{ parameters.convisoFlowApiKey }}'

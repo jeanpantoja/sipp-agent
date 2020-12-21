@@ -47,16 +47,18 @@ jobs:
 
 
     variables:
-      # change to your onpremises flow web service url
       FLOW_API_URL: '${{ parameters.convisoFlowApiUrl }}'
       FLOW_PROJECT_CODE: '${{ parameters.convisoFlowProjectCode }}'
       FLOW_API_INSECURE: '${{ parameters.convisoFlowWithSelfSignedCertificate }}'
 
     steps:
-      - bash: flow --help
+      - bash: flow deploy create -f env_vars with values > deploy_env_vars
         env:
           FLOW_API_KEY: '${{ parameters.convisoFlowApiKey }}'
 
-      - bash: flow sast run --no-send-to-flow
+      - bash: |
+          source deploy_env_vars
+          flow sast run
         env:
           FLOW_API_KEY: '${{ parameters.convisoFlowApiKey }}'
+

@@ -1,16 +1,11 @@
 extends:
-  template: convisoappsec-onpremises-azure-pipelines.yml
+  template: convisoappsec-azure-pipelines.yml
   parameters:
-    # Required parameters
-    convisoSourceBranchTrigger: 'refs/heads/master'
-    registryDomain: 'convisoappsec.azurecr.io'
-    registryServiceConnection: 'registry-service-connection'
+    azureAgentsPool: 'Default'
+    convisoSourceBranchTrigger: 'refs/heads/pipeline_using_dockerhub_and_conviso_registry'
 
+    convisoFlowWithSelfSignedCertificate: false
     convisoFlowApiUrl: 'https://homologa.conviso.com.br'
     convisoFlowApiKey: $(FLOW_API_KEY)
     convisoFlowProjectCode: 'Kt5p5zKb_zbth0o0'
 
-    # Optional parameters:
-    azureAgentsPool: 'Default'
-    convisoFlowCliRepository: 'flowcli'
-    convisoSastRepository: 'sastbox'

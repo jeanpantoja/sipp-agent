@@ -1,0 +1,59 @@
+parameters:
+   - name: azureAgentsPool
+     type: string
+     displayName: 'The self hosted agents pool to execute Conviso jobs'
+     default: Default
+
+   - name: convisoSourceBranchTrigger
+     type: string
+     displayName: 'The name of the branch that will run actions within Conviso'
+     default: 'refs/heads/master'
+
+   - name: convisoFlowApiUrl
+     type: string
+     displayName: 'The url that points to AppSecFlow'
+
+   - name: convisoFlowApiKey
+     type: string
+     displayName: 'The flow api token'
+
+   - name: convisoFlowWithSelfSignedCertificate
+     type: boolean
+     displayName: 'Flag to indicate that flow uses self signed certificate'
+     default: false
+
+   - name: convisoFlowProjectCode
+     type: string
+     displayName: 'The value of the project code'
+
+
+jobs:
+  -
+    job: Conviso_Appsec_Flow_Job
+    condition: eq(variables['build.sourceBranch'], '${{ parameters.convisoSourceBranchTrigger }}')
+    workspace:
+      clean: all
+    pool:
+      name: '${{ parameters.azureAgentsPool }}'
+      demands:
+        - Agent.OS -equals Linux
+        - docker # create the capability docker=/usr/bin/docker
+
+    container:
+      image: convisoappsec/flowcli
+
+
+    variables:
+      # change to your onpremises flow web service url
+      FLOW_API_URL: '${{ parameters.convisoFlowApiUrl }}'
+      FLOW_PROJECT_CODE: '${{ parameters.convisoFlowProjectCode }}'
+      FLOW_API_INSECURE: '${{ parameters.convisoFlowWithSelfSignedCertificate }}'
+
+    steps:
+      - bash: flow --help
+        env:
+          FLOW_API_KEY: '${{ parameters.convisoFlowApiKey }}'
+
+      - bash: flow sast run --no-send-to-flow
+        env:
+          FLOW_API_KEY: '${{ parameters.convisoFlowApiKey }}'

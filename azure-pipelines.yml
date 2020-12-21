@@ -7,5 +7,5 @@ extends:
     convisoFlowWithSelfSignedCertificate: false
     convisoFlowApiUrl: 'https://homologa.conviso.com.br'
     convisoFlowApiKey: $(FLOW_API_KEY)
-    convisoFlowProjectCode: 'Kt5p5zKb_zbth0o0'
+    convisoFlowProjectCode: 'hpgP49QPnjRsgbMe'
 

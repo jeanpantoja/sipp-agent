@@ -5,8 +5,8 @@ rules:
       critical:
         maximum: 0
       high:
-        maximum: 0
+        maximum: 1
       medium:
-        maximum: 0
+        maximum: 2
       low:
         maximum: 0
